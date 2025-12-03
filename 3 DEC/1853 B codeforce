@@ -1,0 +1,38 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int T = sc.nextInt();
+        while (T-- > 0) {
+
+            int n = sc.nextInt();
+            int k = sc.nextInt();
+
+            int ans = 0;
+
+            for (int i = 1; i <= n; i++) {
+                int second = n;  // x-th element where x is k
+                int first = i;   // fixing (k-1)-th element
+                boolean validSeq = true;
+
+                for (int j = 0; j < k - 2; j++) {
+                    int fx = first;
+                    first = second - fx;
+                    second = fx;
+
+                    if (!(first <= second && Math.min(first, second) >= 0)) {
+                        validSeq = false;
+                        break;
+                    }
+                }
+
+                if (validSeq) ans++;
+            }
+
+            System.out.println(ans);
+        }
+
+    }
+}
