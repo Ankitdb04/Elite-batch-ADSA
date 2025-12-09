@@ -1,0 +1,28 @@
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum=0;
+        for(int n:nums){
+            sum+=n;
+        }
+        
+        if(sum%2==1) return false;
+        int t=sum/2;
+        Integer[][] dp=new Integer[nums.length][t+1];
+        return print(nums,nums.length-1,t,dp);
+    }
+    public boolean print(int[] a, int i,int t,Integer[][] dp){
+        if(i==0){
+            return a[0]==t;
+        }
+        if(dp[i][t]!=null) return (dp[i][t]==1)?true:false;
+        if(t==0) return true;
+        boolean l=print(a,i-1,t,dp);
+        boolean r= false;
+        if(a[i]<t){
+            r= print(a,i-1,t-a[i],dp);
+        }
+        dp[i][t]= (l||r)?1:0;
+        return l||r;
+
+    }
+}
