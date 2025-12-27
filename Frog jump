@@ -1,0 +1,31 @@
+class Solution {
+    int minCost(int[] h) {
+        // code here
+        int n=h.length;
+        // Integer []dp=new Integer [n];
+        // dp[0]=0;
+        int prev1=0,prev2=0;
+        for(int i=1;i<n;i++){
+            int fs=prev1+Math.abs(h[i]-h[i-1]);
+            int ss=Integer.MAX_VALUE;
+            if(i>1){
+                ss=prev2+Math.abs(h[i]-h[i-2]);
+            }
+            int curr=Math.min(fs,ss);
+            prev2=prev1;
+            prev1=curr;
+        }
+        return prev1;
+        
+    }
+    // int solve(int idx,int[] h,Integer [] dp){
+    //     if (idx==0)return 0;
+    //     if(dp[idx]!=null) return dp[idx];
+    //     int left=solve(idx-1,h,dp)+Math.abs(h[idx]-h[idx-1]);
+    //     int right=Integer.MAX_VALUE;
+    //     if(idx>1){
+    //         right=solve(idx-2,h,dp)+Math.abs(h[idx]-h[idx-2]);
+    //     }
+    //     return dp[idx]=Math.min(left,right);
+    // }
+}
