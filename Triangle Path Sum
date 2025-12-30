@@ -1,0 +1,15 @@
+class Solution {
+    public int minPathSum(ArrayList<ArrayList<Integer>> triangle) {
+        // Code here
+        int n=triangle.size();
+        Integer [][]dp=new Integer[n][n];
+        return solve(0,0,n,triangle,dp);
+    }
+    int solve(int i,int j,int n,ArrayList<ArrayList<Integer>> t,Integer [][] dp){
+        if(i==n-1) return t.get(i).get(j);
+        if(dp[i][j]!=null) return dp[i][j];
+        int d=t.get(i).get(j)+solve(i+1,j,n,t,dp);
+        int dai=t.get(i).get(j)+solve(i+1,j+1,n,t,dp);
+        return dp[i][j]=Math.min(d,dai);
+    }
+}
