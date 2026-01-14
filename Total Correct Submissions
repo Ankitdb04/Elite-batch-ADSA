@@ -1,0 +1,32 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		// your code goes here
+		Scanner sc=new Scanner(System.in);
+		int t=sc.nextInt();
+		while(t-->0){
+		    int n=sc.nextInt();
+		    Map<String,Long> map=new HashMap<>();
+		    for(int i=0;i<3;i++){
+		        for(int j=0;j<n;j++){
+		            String code=sc.next();
+		            long count=sc.nextLong();
+		            map.put(code,map.getOrDefault(code,0L)+count);
+		        }
+		    }
+		    List<Long> ans=new ArrayList<>(map.values());
+		    Collections.sort(ans);
+		    for(int i=0;i<ans.size();i++){
+		        System.out.print(ans.get(i)+" ");
+		    }
+		    System.out.println();
+		    
+		}
+
+	}
+}
