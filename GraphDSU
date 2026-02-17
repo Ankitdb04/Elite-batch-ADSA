@@ -1,0 +1,59 @@
+import java.io.*;
+import java.lang.reflect.Array;
+import java.util.*;
+public class RoadConstructionDSUcses {
+    static int [] parent;
+    static int [] size;
+    static int comp;
+    static int maxsize;
+    public static void main(String[] args) throws IOException{
+        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st=new StringTokenizer(br.readLine());
+        int n=Integer.parseInt(st.nextToken());
+        int m=Integer.parseInt(st.nextToken());
+        parent=new int[n+1];
+        size=new int [n+1];
+
+        for(int i=1;i<=n;i++){
+            parent[i]=i;
+            size[i]=1;
+        }
+        comp=n;
+        maxsize=1;
+        BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(System.out));
+
+
+        for(int i=0;i<m;i++){
+            st=new StringTokenizer(br.readLine());
+            int a=Integer.parseInt(st.nextToken());
+            int b=Integer.parseInt(st.nextToken());
+            unionBySize(a,b);
+
+            bw.write(comp+" "+(maxsize)+"\n");
+
+
+        }
+        bw.flush();
+
+    }
+    public static int findPar(int x){
+        if(x==parent[x])return x;
+        return parent[x]=findPar(parent[x]);
+    }
+    public static boolean unionBySize(int x,int y ){
+        int px=findPar(x);
+        int py=findPar(y);
+        if(px==py)return false;
+        if(size[px]>=size[py]){
+            parent[py]=px;
+            size[px]+=size[py];
+            maxsize=Math.max(maxsize,size[px]);
+        }else{
+            parent[px]=py;
+            size[py]+=size[px];
+            maxsize=Math.max(maxsize,size[py]);
+        }
+        comp--;
+        return true;
+    }
+}
