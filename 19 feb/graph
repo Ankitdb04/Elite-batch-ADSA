@@ -1,0 +1,72 @@
+import java.util.HashSet;
+import java.util.Map;
+import java.util.*;
+
+public class HackWityInfyQ7 {
+    static int[] parent,size;
+    static Map<Integer, HashSet<Integer>> compMap;
+    static Map<Integer,Integer> compBeauty;
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int q=sc.nextInt();
+        int t=sc.nextInt();
+        //initialization
+        parent=new int [n+1];
+        size=new int [n+1];
+        compMap=new HashMap<>() ;
+        compBeauty=new HashMap<>();
+        for(int i=1;i<=n;i++){
+            parent[i]=i;
+            size[i]=1;
+            HashSet<Integer> set=new HashSet<>();
+            set.add(i);
+            compMap.put(i,set);
+            compBeauty.put(i,1);
+        }
+        long totbeauty=0;
+        while(q-->0){
+            int type=sc.nextInt();
+            int u=sc.nextInt();
+            int v= sc.nextInt();
+            if(type==1){//merge
+                int p_u=find(u);
+                int p_v=find(v);
+                if(p_u!=p_v){//merging krna hai
+                    if(size[p_u]<size[p_v]){
+                        int temp=p_u;
+                        p_u=p_v;
+                        p_v=temp;
+                    }
+                    parent[p_v]=parent[p_u];
+                    size[p_u]+=size[p_v];
+                    HashSet<Integer>big=compMap.get(p_u);
+                    HashSet<Integer>small=compMap.get(p_v);
+                    int beautyBig=compBeauty.get(p_u);
+                    for(int node:small){
+                        boolean left=big.contains(node-1);
+                        boolean right=big.contains(node+1);
+                        if(left && right) beautyBig--;
+                        else if(!left && !right) beautyBig++;
+                        big.add(node);
+                    }
+                    compMap.put(p_u,big);
+                    compBeauty.put(p_u,beautyBig);
+                    compMap.remove(p_v);
+                    compBeauty.remove(p_v);
+                }
+            }
+            else if(type==2){
+                int p_u=find(u);
+                int beauty_u=compBeauty.get(p_u);
+                totbeauty+=beauty_u;
+            }
+        }
+        System.out.println(totbeauty);
+
+    }
+    public static int find(int x){
+        if(x==parent[x])return x;
+        return parent[x]=find(parent[x]);
+    }
+}
