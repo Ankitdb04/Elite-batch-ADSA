@@ -1,0 +1,37 @@
+class Solution {
+    public int orangesRotting(int[][] g) {
+        int [] dr={-1,1,0,0};
+        int [] dc={0,0,-1,1};
+        int n=g.length;
+        int m=g[0].length;
+        int ans=0;
+        int fresh=0;
+        Queue<int []>q=new LinkedList<>();
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(g[i][j]==2)q.offer(new int []{i,j,0});
+                else if(g[i][j]==1) fresh++;
+            }
+        }
+        if(fresh==0)return 0;
+        while(!q.isEmpty()){
+            int [] curr=q.poll();
+            int r=curr[0];
+            int c=curr[1];
+            int step=curr[2];
+            for(int i=0;i<4;i++){
+                int nr=r+dr[i];
+                int nc=c+dc[i];
+                ans=Math.max(ans,step);
+                if(nr>=0 && nr<n && nc<m && nc>=0 && g[nr][nc]!=2&& g[nr][nc]!=0){
+                    fresh--;
+                    g[nr][nc]=2;
+                    q.offer(new int []{nr,nc,step+1});
+                }
+            }
+        }
+        if(fresh!=0)return -1;
+        return ans;
+        
+    }
+}
