@@ -1,0 +1,75 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+public class flightDiscountCses {
+    public static class Pair{
+        int node;
+        long cost;
+        Pair(int node,long cost){
+            this.node=node;
+            this.cost=cost;
+        }
+    }
+    public static class State {
+        int node ;
+        long cost;
+        int used;
+        State(int node, long cost,int used){
+            this.node=node;
+            this.cost=cost;
+            this.used=used;
+        }
+
+
+    }
+    public static void main(String[] args) throws IOException{
+        BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st= new StringTokenizer(br.readLine());
+        int m=Integer.parseInt(st.nextToken());
+        int n=Integer.parseInt(st.nextToken());
+        List<List<Pair>> adj = new ArrayList<>();
+        for(int i=0;i<=n;i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int i=1;i<=m;i++){
+            st=new StringTokenizer(br.readLine());
+            int u=Integer.parseInt(st.nextToken());
+            int v= Integer.parseInt(st.nextToken());
+            long c=Long.parseLong(st.nextToken());
+            adj.get(u).add(new Pair(v, c));
+        }
+        PriorityQueue<State> pq= new PriorityQueue<>((a,b)->Long.compare(a.cost, b.cost));
+        long[][] dist=new long[n+1][2];
+        for(long[] d:dist)
+            Arrays.fill(d,Long.MAX_VALUE);
+        pq.offer(new State(1, 0, 0));
+        dist[1][0]=0;
+        while(!pq.isEmpty()){
+            State s=pq.poll();
+            int node=s.node;
+            long nCost=s.cost;
+            int status=s.used;
+            if(nCost>dist[node][0]) continue;
+            for(Pair p:adj.get(node)){
+                int v=p.node;
+                long vCost=p.cost;
+
+                if(dist[v][status]>vCost+nCost){
+                    dist[v][status]=vCost+nCost;
+                    pq.offer(new State(v, dist[v][status], status));
+                }
+                if(status==0){
+                    vCost=vCost/2;
+                    if(dist[v][1]>vCost+nCost){
+                        dist[v][1]=vCost+nCost;
+                        pq.offer(new State(v, dist[v][1], 1));
+                    }
+                }
+            }
+
+        }
+        System.out.println(Math.min(dist[n][0],dist[n][1]));
+
+    }
+}
